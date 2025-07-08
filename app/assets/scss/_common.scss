@@ -1,0 +1,11 @@
+body {
+    margin: initial;
+    font-family: sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+*:focus-visible {
+    outline: 2px solid var(--colors-content-primary, currentColor);
+    outline-offset: 6px;
+}
