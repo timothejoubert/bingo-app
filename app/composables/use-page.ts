@@ -29,7 +29,6 @@ export function usePage(webResponse: WebResponse) {
 
     nextPage.value = webResponse
     const config = useRuntimeConfig()
-    console.log(config)
 
     // Set html head data
     const pageTitle = `${webResponse?.data?.title} | ${config.public.site.name}`
