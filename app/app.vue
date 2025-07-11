@@ -1,12 +1,31 @@
+<script lang="ts" setup>
+import type { BingoGame } from './types/bingo'
+import { useStorage, StorageSerializers } from '@vueuse/core'
+
+const history = useBingoGameHistory()
+const localStorageHistory = useStorage<BingoGame[] | null>('bingo-app-history', null, undefined, {
+  serializer: StorageSerializers.object,
+})
+
+onMounted(() => {
+    if (localStorageHistory.value) {
+        history.value = localStorageHistory.value
+    }
+})
+console.log('stored history', localStorageHistory.value)
+
+watch(history, (v) => {
+    localStorageHistory.value = v
+    console.log('watch history', localStorageHistory.value)
+}, { deep: true })
+</script>
+
 <template>
-    <div>
+    <UApp>
         <VLoadingIndicator />
         <NuxtRouteAnnouncer />
-        <nav>
-            <a href="/">Home</a>
-            <a href="/test">WildCard page</a>
-        </nav>
+        <VTopBar />
         <NuxtPage />
-        <footer>Footer</footer>
-    </div>
+        <VFooter />
+    </UApp>
 </template>

@@ -1,15 +1,23 @@
 import svgLoader from 'vite-svg-loader'
 import { version } from './package.json'
+import tailwindcss from "@tailwindcss/vite";
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
 	compatibilityDate: '2025-05-15',
-	future: {
-		compatibilityVersion: 4,
-	},
+	// future: {
+	// 	compatibilityVersion: 4,
+	// },
+	srcDir: 'app',
 	devtools: { enabled: true },
-	modules: ['@nuxt/eslint', '@nuxt/icon', '@nuxt/image'],
-	css: ['~/assets/scss/main.scss'],
+	modules: ['@nuxt/eslint', '@nuxt/icon', '@nuxt/image', '@nuxt/ui'],
+	css: ['~/assets/scss/main.css'],
+	// components: [
+	// 	'~/app/components/atoms',
+	// 	'~/app/components/molecules',
+	// 	'~/app/components/organisms',
+	// 	'~/app/components/layouts',
+	// ],
 	runtimeConfig: {
 		public: {
 			version,
@@ -21,20 +29,16 @@ export default defineNuxtConfig({
 		}
 	},
 	vite: {
-		build: {
-			// If the generated svg-sprite file is under 4kb, the build process converts it to an inlined base64 file,
-			// which breaks the use of icons.
-			assetsInlineLimit: 0,
-		},
-		css: {
-			preprocessorOptions: {
-				scss: {
-					additionalData: '@use "assets/scss/_resources.scss" as *;',
-					quietDeps: true,
-				},
-			},
-		},
+		// css: {
+		// 	preprocessorOptions: {
+		// 		scss: {
+		// 			additionalData: '@use "app/assets/scss/_resources.scss" as *;',
+		// 			quietDeps: true,
+		// 		},
+		// 	},
+		// },
 		plugins: [
+			tailwindcss(),
 			// https://github.com/jpkleemans/vite-svg-loader?tab=readme-ov-file#setup
 			svgLoader({
 				svgoConfig: {

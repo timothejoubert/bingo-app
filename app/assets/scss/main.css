@@ -1,0 +1,6 @@
+/* @import "normalize"; */
+/* @import "common"; */
+
+
+@import "tailwindcss";
+@import "@nuxt/ui";

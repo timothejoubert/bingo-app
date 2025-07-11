@@ -73,16 +73,19 @@ export default defineComponent({
 </template>
 
 <style lang="scss" module>
+// ["16bac5","5fbff9","efe9f4","171d1c","5863f8"]
 .root {
     display: var(--v-button-display, inline-flex);
     align-items: var(--v-button-align-items, center);
     justify-content: var(--v-button-justify-content, center);
-    padding: var(--v-button-padding, initial);
+    padding: var(--v-button-padding, 8px 12px);
     border: var(--v-button-border, initial);
-    background-color: var(--v-button-background-color, initial);
+    color: var(--v-button-background-color, #EFE9F4);
+    background-color: var(--v-button-background-color, #171D1C);
     font-family: var(--v-button-font-family, var(--typography-family-label));
     text-decoration: var(--v-button-text-decoration, none);
     user-select: none;
+    border-radius: 4px;
 
     // PROPS STYLE
     &--icon-last {
@@ -129,5 +132,7 @@ export default defineComponent({
     overflow: var(--v-button-label-overflow, hidden);
     text-overflow: var(--v-button-label-text-overflow, ellipsis);
     white-space: var(--v-button-label-white-space, nowrap);
+    text-transform: uppercase;
+    font-weight: 600;
 }
 </style>
