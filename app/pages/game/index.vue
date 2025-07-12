@@ -1,12 +1,15 @@
 <script lang="ts" setup>
-const title = 'Create a new bingo'
-const webResponse = {
-    data: {
-        title
-    }
-}
+definePageMeta({
+    name: 'game_list',
+})
 
-usePage(webResponse)
+const title = computed(() => 'Votre historique de parties')
+
+usePage({
+    data: {
+        title: title.value,
+    },
+})
 </script>
 
 <template>

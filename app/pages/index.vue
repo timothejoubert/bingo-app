@@ -1,16 +1,15 @@
 <script lang="ts" setup>
 definePageMeta({
-  name: 'home',
+    name: 'home',
 })
 
 const title = computed(() => 'Page d\'accueil')
 
 usePage({
     data: {
-        title: title.value
-    }
+        title: title.value,
+    },
 })
-
 </script>
 
 <template>
@@ -21,11 +20,15 @@ usePage({
             </h1>
         </header>
         <div :class="$style.section">
-            <h2 class="text-4xl">Nouvelle Partie</h2>
+            <h2 class="text-4xl">
+                Nouvelle Partie
+            </h2>
             <VCreateGameButton />
         </div>
         <VSection :class="$style.section">
-            <h2 class="text-4xl">Historique</h2>
+            <h2 class="text-4xl">
+                Historique
+            </h2>
             <VHistoryList />
         </VSection>
     </div>

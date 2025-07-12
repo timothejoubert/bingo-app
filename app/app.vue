@@ -10,13 +10,13 @@ const localStorageHistory = useStorage<BingoGame[] | null>('bingo-app-history', 
 onMounted(() => {
     if (localStorageHistory.value) {
         history.value = localStorageHistory.value
+        console.log('set history state from localStorage')
     }
 })
-console.log('stored history', localStorageHistory.value)
 
 watch(history, (v) => {
     localStorageHistory.value = v
-    console.log('watch history', localStorageHistory.value)
+    console.log('set localStorage from history')
 }, { deep: true })
 </script>
 

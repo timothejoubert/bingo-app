@@ -1,9 +1,10 @@
 <template>
     <nav :class="$style.root">
-        <a href="/">Home</a>
-        <a href="/game">Historique</a>
+        <NuxtLink href="/">Home</NuxtLink>
+        <NuxtLink href="/game">Historique</NuxtLink>
     </nav>
 </template>
+
 <style lang="scss" module>
 .root {
     display: flex;

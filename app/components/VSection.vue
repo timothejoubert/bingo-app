@@ -1,8 +1,9 @@
 <template>
     <section :class="$style.root">
-        <slot></slot>
+        <slot />
     </section>
 </template>
+
 <style lang="scss" module>
 .root {
     max-width: min(calc(100% - 16px * 2), 1200px);

@@ -3,6 +3,7 @@
         footer
     </footer>
 </template>
+
 <style lang="scss" module>
 .root {
     display: flex;

@@ -1,33 +1,67 @@
 <script lang="ts" setup>
 
-// const start = ref(1)
-// const end = ref(99)
+defineProps<{
+    buttonLabel?: string
+}>()
 
-// const { createNewGame } = useBingoGame()
-// const history = useBingoGameHistory()
+const { createNewGame } = useBingoGame()
+const history = useBingoGameHistory()
 
-// function onSubmit(event: Event) {
-//     event.preventDefault()
+const startValue = ref(1)
+const endValue = ref(99)
 
-//     const index = Number(history.value.length) + 1
-//     const id = index.toString()
-//     createNewGame(id, { gridStart: start.value, gridEnd: end.value })
+function onSubmit() {
+    const index = Number(history.value?.length || 0) + 1
+    const id = index.toString()
+    createNewGame(id, { gridStart: startValue.value, gridEnd: endValue.value })
 
-//     console.log('createNewGame', id)
-//     navigateTo({ name: 'game', params: { id }})
-// }
+    console.log('createNewGame', id)
 
+    // Naviguer vers la partie
+    navigateTo({ name: 'game', params: { id } })
+}
 </script>
-<template>
-  <UModal
-    title="Modal with description"
-    :transition="false"
-    description="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-  >
-    <UButton label="Open" color="neutral" variant="subtle" />
 
-    <template #body>
-      <VPlaceholder class="h-48" />
-    </template>
-  </UModal>
+<template>
+    <UModal
+        title="Création d'une nouvelle partie"
+        description="Définissez vos paramètres"
+        :ui="{ body: 'flex gap-x-4', footer: 'justify-end' } "
+    >
+        <UButton
+            :label="buttonLabel || 'Lancer une partie'"
+            variant="subtle"
+        />
+        <template
+            #body
+            class="text-h2"
+        >
+            <UFormField
+                label="Numéro de début"
+                class="w-1/2"
+            >
+                <UInputNumber v-model="startValue" />
+            </UFormField>
+            <UFormField
+                label="Numéro de fin"
+                class="w-1/2"
+            >
+                <UInputNumber v-model="endValue" />
+            </UFormField>
+        </template>
+
+        <template #footer="{ close }">
+            <UButton
+                label="Annuler"
+                color="neutral"
+                variant="subtle"
+                @click="close"
+            />
+            <UButton
+                label="Valider"
+                variant="subtle"
+                @click="onSubmit"
+            />
+        </template>
+    </UModal>
 </template>

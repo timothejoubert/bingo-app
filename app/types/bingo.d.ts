@@ -10,11 +10,11 @@ export type BingoGame = {
     startDate: string
     endDate: null | string
     options: BingoOptions
-    storedNumber: number[]
-    restNumber: number[]
+    pickNumbers: number[]
+    restNumbers: number[]
+    grid: number[]
     status: BingoStatus
 }
 type KeyArr<T> = readonly (keyof T)[];
 
 export type BingoGameKeys = KeyArr<BingoGame>
-
