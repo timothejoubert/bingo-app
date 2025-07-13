@@ -3,7 +3,7 @@ definePageMeta({
     name: 'home',
 })
 
-const title = computed(() => 'Page d\'accueil')
+const title = computed(() => 'Votre jeu de Bingo français en ligne')
 
 usePage({
     data: {
@@ -13,29 +13,12 @@ usePage({
 </script>
 
 <template>
-    <div :class="$style.root">
-        <header>
-            <h1>
-                {{ title }}
-            </h1>
-        </header>
-        <div :class="$style.section">
-            <h2 class="text-4xl">
-                Nouvelle Partie
-            </h2>
+    <div>
+        <VSection title="Nouvelle partie">
             <VCreateGameButton />
-        </div>
-        <VSection :class="$style.section">
-            <h2 class="text-4xl">
-                Historique
-            </h2>
+        </VSection>
+        <VSection title="Historique de vos parties">
             <VHistoryList />
         </VSection>
     </div>
 </template>
-
-<style lang="scss" module>
-.root {
-    // background-color: lightgrey;
-}
-</style>

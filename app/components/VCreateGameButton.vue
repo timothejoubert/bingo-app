@@ -8,7 +8,7 @@ const { createNewGame } = useBingoGame()
 const history = useBingoGameHistory()
 
 const startValue = ref(1)
-const endValue = ref(99)
+const endValue = ref(89)
 
 function onSubmit() {
     const index = Number(history.value?.length || 0) + 1
@@ -30,7 +30,7 @@ function onSubmit() {
     >
         <UButton
             :label="buttonLabel || 'Lancer une partie'"
-            variant="subtle"
+            class="block mx-auto"
         />
         <template
             #body

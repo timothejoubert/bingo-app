@@ -13,16 +13,9 @@ usePage({
 </script>
 
 <template>
-    <div :class="$style.root">
-        <h1>
-            {{ title }}
-        </h1>
-        <VHistoryList />
+    <div>
+        <VSection :title="title">
+            <VHistoryList />
+        </VSection>
     </div>
 </template>
-
-<style lang="scss" module>
-.root {
-    // background-color: lightgrey;
-}
-</style>
