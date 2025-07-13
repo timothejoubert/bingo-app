@@ -7,17 +7,20 @@ defineProps<{
 const { createNewGame } = useBingoGame()
 const history = useBingoGameHistory()
 
+const manuelMode = ref(false)
 const startValue = ref(1)
 const endValue = ref(89)
 
 function onSubmit() {
     const index = Number(history.value?.length || 0) + 1
     const id = index.toString()
-    createNewGame(id, { gridStart: startValue.value, gridEnd: endValue.value })
 
-    console.log('createNewGame', id)
+    createNewGame(id, {
+        gridStart: startValue.value,
+        gridEnd: endValue.value,
+        manuelMode: manuelMode.value
+    })
 
-    // Naviguer vers la partie
     navigateTo({ name: 'game', params: { id } })
 }
 </script>
@@ -26,7 +29,7 @@ function onSubmit() {
     <UModal
         title="Création d'une nouvelle partie"
         description="Définissez vos paramètres"
-        :ui="{ body: 'flex gap-x-4', footer: 'justify-end' } "
+        :ui="{ body: 'grid gap-x-4 gap-y-6 grid-cols-2', footer: 'justify-end' } "
     >
         <UButton
             :label="buttonLabel || 'Lancer une partie'"
@@ -38,15 +41,20 @@ function onSubmit() {
         >
             <UFormField
                 label="Numéro de début"
-                class="w-1/2"
             >
                 <UInputNumber v-model="startValue" />
             </UFormField>
             <UFormField
                 label="Numéro de fin"
-                class="w-1/2"
             >
                 <UInputNumber v-model="endValue" />
+            </UFormField>
+            <UFormField
+                label="Version manuelle"
+                description="Rentrer manuellement les numéros tirés chez vous."
+                class="col-span-full"
+            >
+                <UCheckbox v-model="manuelMode" />
             </UFormField>
         </template>
 

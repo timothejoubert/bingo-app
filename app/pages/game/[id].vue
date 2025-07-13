@@ -74,7 +74,7 @@ function onManuelInput(event: Event) {
 }
 
 // Page Data
-const title = computed(() => `Game ${gameId.value}`)
+const title = computed(() => `Partie #${gameId.value}`)
 usePage({
     data: {
         title: title.value,
@@ -112,7 +112,7 @@ usePage({
                         :color="isFinished ? 'neutral' : undefined"
                         @click="rollNumber"
                     />
-                    <UFormField label="Choisir le prochain numéro" :error="manuelInputError">
+                    <UFormField v-show="currentGame?.options.manuelMode" label="Choisir le prochain numéro" :error="manuelInputError">
                         <UInput @change="onManuelInput" @blur="manuelInputError = ''" type="number" />
                     </UFormField>
                 </div>

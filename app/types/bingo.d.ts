@@ -3,6 +3,7 @@ export type BingoStatus = 'started' | 'finished'
 export type BingoOptions = {
     gridStart: number
     gridEnd: number
+    manuelMode: boolean
 }
 
 export type BingoGame = {

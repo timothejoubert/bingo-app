@@ -13,7 +13,7 @@ function addBingoCard() {
     cards.value.unshift({ id:cards.value.length, item: card})
 }
 
-const title = computed(() => 'Générer vos cartons')
+const title = computed(() => 'Générez vos cartons')
 usePage({
     data: {
         title: title.value,
