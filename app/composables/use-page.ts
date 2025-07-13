@@ -38,7 +38,7 @@ export function usePage(webResponse: WebResponse) {
     usePageHead(webResponse)
     usePageSeoMeta(webResponse)
 
-    // update 
+    // update
     const app = useNuxtApp()
     app.hook('page:transition:finish', () => {
         console.log('page:transition:finish')

@@ -15,8 +15,6 @@ const loading = computed(() => {
 
 const { deleteGame } = useBingoGame()
 
-
-
 const UButton = resolveComponent('UButton')
 const UDropdownMenu = resolveComponent('UDropdownMenu')
 const UBadge = resolveComponent('UBadge')
