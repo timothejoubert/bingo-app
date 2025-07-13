@@ -14,6 +14,8 @@ onMounted(() => {
     }
 })
 
+// TODO: perf
+// update localStorageHistory only when user leave window or change route
 watch(history, (v) => {
     localStorageHistory.value = v
     console.log('set localStorage from history')

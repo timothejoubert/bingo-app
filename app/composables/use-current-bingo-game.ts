@@ -11,5 +11,7 @@ export function useCurrentBingoGame() {
         return history.value?.find(game => game.id == gameId.value)
     })
 
-    return { currentGame, gameId }
+    const isFinished = computed(() => currentGame.value?.status === 'finished')
+
+    return { currentGame, gameId, isFinished }
 }

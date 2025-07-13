@@ -8,44 +8,43 @@ definePageMeta({
     },
 })
 
+
+// TODO: store game history on each actions
+// on pickNumber, pickManualNumber, userWinRow, useWinCard, gameFinished
+
 // Bingo features
-const { currentGame, gameId } = useCurrentBingoGame()
+const { currentGame, gameId, isFinished } = useCurrentBingoGame()
 const { rollNewNumber, pickNumber } = useBingoGame()
 
 
 // Game state
 const displayFinishedModal = ref(false)
-const isFinished = computed(() => currentGame.value?.status === 'finished')
 watch(isFinished, (value) => {
     if (value) displayFinishedModal.value = true
 })
 
 // Game history
-function createTimelineItem(number: number | null, date?: Date) {
-    const dateText = date ? date.toLocaleString('fr-FR', {
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
-        hour12: false
-      }) : 'unknown date'
+const gameHistory = ref<TimelineItem[]>([])
+const currentRound = computed(() => gameHistory.value.length)
 
+const formatTlDate = (date: Date) => {
+    return date.toLocaleString('fr-FR', { hour: '2-digit', minute: '2-digit', second: '2-digit',hour12: false})
+}
+
+function createTimelineItem(number: number, item?: Omit<TimelineItem, 'date'> & { date?: Date }) {
     return {
-        date: dateText,
         title: `Nombre: ${number}`,
-        icon: 'i-lucide-rocket'
+        icon: 'i-lucide-rocket',
+        value: number,
+        ...(item || {}),
+        date: item?.date ? formatTlDate(item.date) : 'unknown date',
     }
 }
 
-const activeRound = ref(0)
-const gameHistory = ref<TimelineItem[]>([])
-
-watch(gameHistory, (histories) => {
-    activeRound.value = histories.length
-}, { deep: true })
-
 watch(currentGame, (game) => {
     console.log('watch currentGame', game)
-    const list = game?.pickNumbers.map((n) => createTimelineItem(n)) || []
+    const list = game?.pickNumbers.map((n) => createTimelineItem(n, { description: 'Entrée pré-enregistrée' }))
+    if(!list) return
     list.reverse()
 
     gameHistory.value.push(...list)
@@ -53,8 +52,9 @@ watch(currentGame, (game) => {
 
 function rollNumber() {
     const number = rollNewNumber(gameId.value)
-    const item = createTimelineItem(number, new Date())
+    if (!number) return
 
+    const item = createTimelineItem(number, { date: new Date()})
     gameHistory.value.unshift(item)
 }
 
@@ -69,6 +69,9 @@ function onManuelInput(event: Event) {
     const response = pickNumber(gameId.value, value)
     if (response) {
         manuelInputError.value = response.error
+    } else {
+        const item = createTimelineItem(value, { date: new Date(), description: 'Entrée manuelle' })
+        gameHistory.value.unshift(item)
     }
     target.value = ''
 }
@@ -119,9 +122,9 @@ usePage({
             </div>
             <USeparator orientation="vertical" class="h-full" />
             <aside :class="$style.aside">
-                <div :class="$style.aside__title" class="text-lg">Historique de la partie: {{ activeRound }}</div>
+                <div :class="$style.aside__title" class="text-lg">Historique de la partie: {{ currentRound }}</div>
                 <div :class="$style['history-aside']">
-                    <UTimeline v-model="activeRound" :items="gameHistory" />
+                    <UTimeline v-model="currentRound" :items="gameHistory" />
                 </div>
             </aside>
         </div>
