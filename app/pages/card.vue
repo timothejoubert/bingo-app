@@ -23,26 +23,32 @@ usePage({
 
 <template>
     <div>
-        <VSection title="Nouveau carton">
-            <UButton
-                label="Générer un carton"
-                @click="addBingoCard"
-                class="block mx-auto"
-            />
+        <VSection title="Nouveau carton" v-slot="{ spacingStyle }">
+            <div :class="spacingStyle">
+                <UButton
+                    label="Générer un carton"
+                    @click="addBingoCard"
+                    class="block mx-auto"
+                />
+            </div>
         </VSection>
-        <VSection title="Vos cartons générés">
-            <UButton
-                v-if="!cards.length"
-                label="Générer votre premier carton"
-                variant="subtle"
-                @click="addBingoCard"
-                class="block mx-auto mt-15 mb-10"
-            />
+        <VSection
+            v-slot="{ spacingStyle }"
+            title="Vos cartons générés"
+        >
+            <div :class="spacingStyle" v-if="!cards.length">
+                <UButton
+                    label="Générer votre premier carton"
+                    variant="subtle"
+                    @click="addBingoCard"
+                    class="block mx-auto mt-15 mb-10"
+                />
+            </div>
             <template
                 v-for="card in cards"
                 :key="'card' + card.id"
             >
-                <div class="mt-6">
+                <div class="mt-6" :class="spacingStyle">
                     <div class="mb-3">#{{ card.id }}</div>
                     <VBingoCardGrid
                         :card="card.item"

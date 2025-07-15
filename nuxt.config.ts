@@ -29,14 +29,14 @@ export default defineNuxtConfig({
     srcDir: 'app',
     compatibilityDate: '2025-05-15',
     vite: {
-        // css: {
-        // 	preprocessorOptions: {
-        // 		scss: {
-        // 			additionalData: '@use "app/assets/scss/_resources.scss" as *;',
-        // 			quietDeps: true,
-        // 		},
-        // 	},
-        // },
+        css: {
+            preprocessorOptions: {
+                scss: {
+                    additionalData: '@use "~/assets/scss/_resources.scss" as *;',
+                    quietDeps: true,
+                },
+            },
+        },
         plugins: [
             tailwindcss(),
             // https://github.com/jpkleemans/vite-svg-loader?tab=readme-ov-file#setup

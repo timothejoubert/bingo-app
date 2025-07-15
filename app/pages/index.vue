@@ -15,11 +15,17 @@ usePage({
 
 <template>
     <div>
-        <VSection title="Création d'une nouvelle partie">
-            <VCreateGameButton />
+        <VSection
+            v-slot="{ spacingStyle }"
+            title="Création d'une nouvelle partie"
+        >
+            <VCreateGameButton :class="spacingStyle" />
         </VSection>
-        <VSection title="Historique de vos parties">
-            <VHistoryList />
+        <VSection
+            v-slot="{ spacingStyle }"
+            title="Historique de vos parties"
+        >
+            <VHistoryList :class="spacingStyle" />
         </VSection>
     </div>
 </template>

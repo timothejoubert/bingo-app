@@ -6,29 +6,38 @@ defineProps<{
 
 <template>
     <section :class="$style.root">
-        <template v-if="title">
-            <h2 class="text-lg my-3 w-full">{{ title }}</h2>
-            <USeparator :class="$style.separator" class="mb-5" />
-        </template>
-        <slot />
+        <h2 v-if="title" class="text-lg" :class="$style.title">
+            {{ title }}
+            <VPlaceholder :class="$style.placeholder" />
+        </h2>
+        <slot :spacing-style="$style.content" />
     </section>
 </template>
 
 <style lang="scss" module>
 .root {
-    --v-section-padding-inline: 18px;
-
     max-width: min(calc(100% - 16px * 2), 1000px);
     margin-inline: auto;
     border: 1px solid var(--ui-border);
     border-radius: 8px;
-    padding-inline: var(--v-section-padding-inline);
-    padding-bottom: 22px;
     margin-block: 72px;
 }
 
-.separator {
-    margin-left: calc(var(--v-section-padding-inline) * -1);
-    width: calc(100% + var(--v-section-padding-inline) * 2)
+.title {
+    position: relative;
+    width: 100%;
+    border-bottom: 1PX solid var(--ui-border);
+    padding: var(--v-section-content-padding-block, 14px) var(--v-section-content-padding-inline, 20px);
+}
+
+.placeholder {
+    position: absolute;
+    inset: 0px;
+    z-index: -1;
+    pointer-events: none;
+}
+
+.content {
+    padding: var(--v-section-content-padding-block, 20px) var(--v-section-content-padding-inline, 18px);
 }
 </style>

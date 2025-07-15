@@ -4,6 +4,8 @@ defineProps<{
     buttonLabel?: string
 }>()
 
+const modalOpened = ref(false)
+
 const { createNewGame } = useBingoGame()
 const history = useBingoGameHistory()
 
@@ -26,15 +28,18 @@ function onSubmit() {
 </script>
 
 <template>
-    <UModal
+    <div>
+        <UButton
+            :label="buttonLabel || 'Lancer une partie'"
+            class="block mx-auto"
+            @click="modalOpened =! modalOpened"
+        />
+        <UModal
+        v-model:open="modalOpened"
         title="Création d'une nouvelle partie"
         description="Définissez vos paramètres"
         :ui="{ body: 'grid gap-x-4 gap-y-6 grid-cols-2', footer: 'justify-end' } "
     >
-        <UButton
-            :label="buttonLabel || 'Lancer une partie'"
-            class="block mx-auto"
-        />
         <template
             #body
             class="text-h2"
@@ -72,4 +77,5 @@ function onSubmit() {
             />
         </template>
     </UModal>
+    </div>
 </template>

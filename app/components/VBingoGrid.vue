@@ -44,7 +44,11 @@ const displayedNumbers = computed(() => {
 <style lang="scss" module>
 .root {
     display: grid;
-    grid-template-columns: repeat(10, minmax(0, 1fr));
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+
+    @include media('>=sm') {
+        grid-template-columns: repeat(10, minmax(0, 1fr));
+    }
 }
 
 .cell {

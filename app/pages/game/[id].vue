@@ -48,7 +48,7 @@ watch(currentGame, (game) => {
     list.reverse()
 
     gameHistory.value.push(...list)
-})
+},{ immediate: true })
 
 function rollNumber() {
     const number = rollNewNumber(gameId.value)
@@ -102,16 +102,24 @@ usePage({
                 <VCreateGameButton button-label="Relancer une partie" />
             </template>
         </UModal>
-        <div :class="$style.body">
-            <div :class="$style.main">
-                <VBingoGrid
-                    :game="currentGame"
-                />
-                <div class="flex gap-x-2 mt-10 items-end justify-between">
+        <VSection :title="title">
+            <div :class="$style.body">
+                <div :class="$style.main">
+                    <VBingoGrid
+                        :game="currentGame"
+                    />
+                </div>
+                <aside :class="$style.aside">
+                    <div :class="$style.aside__title" class="text-lg">Historique de la partie: <strong>{{ currentRound }}</strong></div>
+                    <div :class="$style['history-aside']">
+                        <UTimeline v-model="currentRound" :items="gameHistory" />
+                    </div>
+                </aside>
+                <div :class="$style.controls">
+                    <VPlaceholder :class="$style.placeholder" />
                     <UButton
                         :disabled="isFinished"
                         label="Tirer un numéro"
-                        variant="subtle"
                         :color="isFinished ? 'neutral' : undefined"
                         @click="rollNumber"
                     />
@@ -120,14 +128,7 @@ usePage({
                     </UFormField>
                 </div>
             </div>
-            <USeparator orientation="vertical" class="h-full" />
-            <aside :class="$style.aside">
-                <div :class="$style.aside__title" class="text-lg">Historique de la partie: {{ currentRound }}</div>
-                <div :class="$style['history-aside']">
-                    <UTimeline v-model="currentRound" :items="gameHistory" />
-                </div>
-            </aside>
-        </div>
+        </VSection>
     </div>
 </template>
 
@@ -138,26 +139,41 @@ usePage({
 
 .body {
     display: grid;
-    grid-template-columns: 1fr auto 260px;
+    grid-template-columns: 1fr;
+    grid-template-areas:
+        "main"
+        "controls"
+        "aside";
+
     margin-inline: auto;
-    gap: 72px;
     align-items: flex-start;
     margin-inline: auto;
     min-height: 60vh;
-    max-width: min(calc(100% - 32px * 2), 900px);
+
+    @include media('>=md') {
+        grid-template-columns: 1fr 260px;
+        grid-template-rows: 1fr auto;
+        grid-template-areas:
+            "main aside"
+            "controls aside";
+    }
 }
 
 .main {
-    // width: min(500px, 100%);
+    grid-area: main;
     align-self: center;
+    margin: 20px;
 }
 
 .aside {
+    grid-area: aside;
     position: relative;
     overflow-y: scroll;
     height: 100%;
     width: 100%;
-    padding: 0 8px 20px 8px;
+    min-height: 50vh;
+    padding-left: 20px;
+    border-left: 1PX solid var(--ui-border);
 
     &::before {
         position: absolute;
@@ -170,6 +186,7 @@ usePage({
 .aside__title {
     position: sticky;
     top: 0;
+    padding-top: 20px;
     padding-bottom: 12px;
     background-color: var(--ui-bg);
 }
@@ -178,5 +195,30 @@ usePage({
     position: absolute;
     z-index: -1;
     width: 100%;
+}
+
+.controls {
+    position: sticky;
+    bottom: 20px;
+    background-color: var(--ui-bg);
+    grid-area: controls;
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    align-items: flex-end;
+    border-top: 1PX solid var(--ui-border);
+    border-bottom: 1PX solid var(--ui-border);
+
+    @include media('>=md') {
+        position: relative;
+        bottom: unset;
+        border-bottom: none;
+    }
+}
+
+.placeholder {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
 }
 </style>

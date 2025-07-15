@@ -3,7 +3,7 @@ definePageMeta({
     name: 'game_list',
 })
 
-const title = computed(() => 'Votre historique de parties')
+const title = computed(() => 'Historique de vos parties')
 
 usePage({
     data: {

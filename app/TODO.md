@@ -5,10 +5,14 @@
 - Créer une nouvelle partie
 - Générer ces grilles (à imprimer)
 
-### Création d'une partie 
-- Setup des options 
+### Création d'une partie
+- Setup des options
 - lancer un numéro aléatoirement / version manuelle (si on veut jouer pour juste garder un historique des numéro)
-- update de la grille 
+- update de la grille
 
 ## TO_DO
-- Garder en local_storage les info (+ historique) des, si jamais on refresh la page 
+- Resposive
+- Type safety routes (https://www.youtube.com/watch?v=SXk-L19gTZk)
+- Garder en local_storage les info (+ historique) si jamais on refresh la page
+- Add BDD
+- Faire une page de statistique pour montre le pourcentage de chaque numéro tombé (webWorker, éviter de poluer le mainThread)
