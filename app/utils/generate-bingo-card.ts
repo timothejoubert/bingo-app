@@ -13,8 +13,14 @@ export function generateBingoCardGrid(): BingoCardGrid {
   const grid: BingoCardGrid = Array.from({ length: rows }, () => Array<GridCell>(cols).fill(null));
 
   const columnRanges: [number, number][] = [
-    [1, 10], [11, 20], [21, 30], [31, 40],
-    [41, 50], [51, 60], [61, 70], [71, 89]
+    [1, 10],
+    [11, 20],
+    [21, 30],
+    [31, 40],
+    [41, 50],
+    [51, 60],
+    [61, 70],
+    [71, 89]
   ];
 
   const columnNumbers: number[][] = [];
@@ -22,7 +28,7 @@ export function generateBingoCardGrid(): BingoCardGrid {
 
   // Étape 1 : générer les numéros de chaque colonne
   for (let i = 0; i < cols; i++) {
-    const [min, max] = columnRanges[i];
+    const [min, max] = columnRanges[i] || [0, 0]
     const remaining = totalNumbers - total;
     const maxThisCol = Math.min(2, remaining);
     const count = (Math.random() < 0.5 || maxThisCol === 1) ? 1 : 2;
@@ -49,7 +55,7 @@ export function generateBingoCardGrid(): BingoCardGrid {
   for (let col = 0; col < cols; col++) {
     const nums = columnNumbers[col];
 
-    if (nums.length === 2) {
+    if (nums?.length === 2) {
       const availableRows = [0, 1, 2].filter(r => rowCounts[r] < 5);
       availableRows.sort((a, b) => rowCounts[a] - rowCounts[b]);
 

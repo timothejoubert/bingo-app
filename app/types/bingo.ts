@@ -3,7 +3,7 @@ export type BingoStatus = 'started' | 'finished'
 export type BingoOptions = {
     gridStart: number
     gridEnd: number
-    manuelMode: boolean
+    manualMode: boolean
 }
 
 type User = {
@@ -13,7 +13,7 @@ type User = {
 }
 
 type RoundHistoryData = {
-    [key as string]: unknown
+    [key: string]: unknown
     value?: string | number
     message?: string
 }

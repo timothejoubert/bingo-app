@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { BingoGame } from './types/bingo'
+import type { BingoGame } from '~/types/bingo'
 import { useStorage, StorageSerializers } from '@vueuse/core'
 
 const history = useBingoGameHistory()
