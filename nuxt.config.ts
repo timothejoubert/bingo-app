@@ -5,14 +5,14 @@ import tailwindcss from '@tailwindcss/vite'
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
     modules: ['@nuxt/eslint', '@nuxt/icon', '@nuxt/image', '@nuxt/ui'],
+    // components: [
+    //     '~/app/components/atoms',
+    //     '~/app/components/molecules',
+    //     '~/app/components/organisms',
+    //     '~/app/components/layouts',
+    // ],
     devtools: { enabled: true },
     css: ['~/assets/scss/main.css'],
-    // components: [
-    // 	'~/app/components/atoms',
-    // 	'~/app/components/molecules',
-    // 	'~/app/components/organisms',
-    // 	'~/app/components/layouts',
-    // ],
     runtimeConfig: {
         public: {
             version,
@@ -23,10 +23,13 @@ export default defineNuxtConfig({
             },
         },
     },
-    // future: {
-    // 	compatibilityVersion: 4,
-    // },
     srcDir: 'app',
+    future: {
+        compatibilityVersion: 4,
+    },
+    experimental: {
+        typedPages: true,
+    },
     compatibilityDate: '2025-05-15',
     vite: {
         css: {

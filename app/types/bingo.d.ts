@@ -6,13 +6,31 @@ export type BingoOptions = {
     manuelMode: boolean
 }
 
+type User = {
+    id: string
+    type: 'host' | 'player'
+    name?: string
+}
+
+type RoundHistoryData = {
+    [key as string]: unknown
+    value?: string | number
+    message?: string
+}
+
+type RoundHistory = {
+    type: 'statusUpdated' | 'rollNumber' | 'userAction'
+    user?: User
+    data?: RoundHistoryData
+    timestamp: number
+}
+
 export type BingoGame = {
     id: string
     startDate: string
     endDate: null | string
     options: BingoOptions
-    pickNumbers: number[]
-    restNumbers: number[]
+    roundHistory: RoundHistory[]
     grid: number[]
     status: BingoStatus
 }

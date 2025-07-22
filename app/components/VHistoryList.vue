@@ -13,8 +13,6 @@ const loading = computed(() => {
     return !history.value && !uTableMounted.value
 })
 
-const { deleteGame } = useBingoGame()
-
 const UButton = resolveComponent('UButton')
 const UDropdownMenu = resolveComponent('UDropdownMenu')
 const UBadge = resolveComponent('UBadge')
@@ -112,7 +110,7 @@ function getRowItems(row: Row<TableData>) {
       label: 'Supprimer la partie',
       onSelect() {
         const id = row.getValue('id')
-        deleteGame(id)
+        if(id) useBingoGame(id).deleteGame()
 
         toast.add({
           title: `Partie #${id} à bien été supprimée`,

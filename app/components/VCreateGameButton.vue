@@ -6,18 +6,23 @@ defineProps<{
 
 const modalOpened = ref(false)
 
-const { createNewGame } = useBingoGame()
 const history = useBingoGameHistory()
+
+const newGameId = computed(() => {
+    const length = (history.value?.length || 0)
+    return (length + 1).toString()
+})
+
+const { createNewGame } = useBingoGame(newGameId.value)
 
 const manuelMode = ref(false)
 const startValue = ref(1)
 const endValue = ref(89)
 
 function onSubmit() {
-    const index = Number(history.value?.length || 0) + 1
-    const id = index.toString()
+    const id = newGameId.value
 
-    createNewGame(id, {
+    createNewGame({
         gridStart: startValue.value,
         gridEnd: endValue.value,
         manuelMode: manuelMode.value

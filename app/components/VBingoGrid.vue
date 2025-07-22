@@ -2,14 +2,13 @@
 import type { BingoGame } from '~/types/bingo';
 
 const props = defineProps<{
-    game: BingoGame | undefined
+    game: BingoGame
 }>()
 
-const lastPicked = computed(() => {
-    const list = props.game?.pickNumbers
-    if (!list) return
+const { pickNumbers, } = useBingoGame(props.game.id)
 
-    return list[list.length - 1]
+const lastPicked = computed(() => {
+    return pickNumbers.value[pickNumbers.value.length - 1]
 })
 
 const displayedNumbers = computed(() => {
@@ -25,7 +24,7 @@ const displayedNumbers = computed(() => {
             :key="'cell-' + item"
             :class="[
                 $style.cell,
-                game.pickNumbers?.includes(item) && $style['cell--active'],
+                pickNumbers?.includes(item) && $style['cell--active'],
                 item === lastPicked && $style['cell--current']
             ]"
         >
@@ -69,10 +68,10 @@ const displayedNumbers = computed(() => {
     }
 
     &--active {
-        color: var(--ui-text-inverted);
+        color: var(--ui-text-highlighted);
 
         &::before {
-            background-color: var(--ui-color-primary-400);
+            background-color: var(--ui-bg-accented);
         }
     }
 
@@ -80,7 +79,7 @@ const displayedNumbers = computed(() => {
         color: var(--ui-text-inverted);
 
         &::before {
-            background-color: var(--ui-color-primary-50);
+            background-color: var(--ui-color-primary-400);
         }
     }
 }

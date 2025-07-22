@@ -1,50 +1,61 @@
-import type { BingoGame, BingoOptions } from "~/types/bingo"
+import type { BingoGame, BingoOptions, RoundHistory } from "~/types/bingo"
+import { roundHistoryDataValue, roundHistoryType, roundHistoryStatus } from '~/constants/bingo'
+function getHostUser() {
+    return {
+        type: 'host' as const,
+        id: 'host_id',
+    }
+}
 
-export function useBingoGame() {
+function getPlayerUser() {
+    return {
+        type: 'player' as const,
+        id: 'player_id',
+    }
+}
+
+export function useBingoGame(gameId: string) {
     const history = useBingoGameHistory()
 
+    const currentGame = computed(() => history.value?.find(game => game.id === gameId))
+    const gameHistory = computed(() => currentGame.value?.roundHistory || [])
+    const isFinished = computed(() => currentGame.value?.status === roundHistoryStatus.FINISHED)
+    const pickNumbers = computed(() => {
+        return gameHistory.value
+            .filter(history => history.type === 'rollNumber' && history.data?.value && typeof history.data.value === 'number')
+            .map(history => (history.data as { value: number}).value)
+    })
 
-    function getGame(gameId: string) {
-        const game = history.value?.find(game => game.id === gameId)
+    const restNumbers = computed(() => {
+        return currentGame.value?.grid.filter(n => !pickNumbers.value.includes(n)) || []
+    })
 
-        if (!game) {
-            console.error('cant find game from id', gameId)
-        }
-        return game
-    }
-
-    function deleteGame(id: string) {
-        if(!history.value || !history.value.length) {
-            console.error('Game history is empty')
-            return
-        }
-
-        const index = history.value.findIndex(game => game.id === id) || -1
-
-        if (index === -1) {
-            console.error('cant find game from history for id:', id)
-            return
-        }
-
-        history.value?.splice(index, 1)
-    }
-
-    function createNewGame(id: string, options: BingoOptions) {
-
+    // STATUS ACTIONS
+    function createNewGame(options: BingoOptions) {
         const grid = Array.from(
             { length: options.gridEnd - options.gridStart + 1 },
             (_, i) => options.gridStart + i
         )
+        const now = new Date()
         const game = {
-            id,
-            startDate: (new Date()).toISOString(),
+            id: gameId,
+            startDate: now.toISOString(),
             endDate: null,
             options,
-            pickNumbers: [] as number[],
-            restNumbers: [...grid],
+            roundHistory: [{
+                type: 'statusUpdated',
+                user: getHostUser(),
+                timestamp: now.getTime(),
+                data: {
+                    value: roundHistoryDataValue.CREATED,
+                    message: 'Partie créée',
+                }
+            }],
             grid,
             status: 'started' as const
         } as BingoGame
+
+
 
         if(!history.value) {
             history.value = [game]
@@ -52,54 +63,89 @@ export function useBingoGame() {
             history.value.push(game)
         }
 
-        return id
+        return gameId
     }
 
-    function pickNumber(gameId: string, number: number) {
-        const game = getGame(gameId)
-        if (!game) return null
-        if (game.status === 'finished') return null
-
-        const index = game.restNumbers?.findIndex((nb) => nb === number)
-        if (index === -1) {
-            return { error: `Le numbre ${number} n\'est pas disponnible` }
+    function deleteGame() {
+        if(!history.value?.length) {
+            console.error('Game history is empty')
+            return
         }
 
-        game.pickNumbers.push(number)
-        game.restNumbers.splice(index, 1)
+        const gameIndex = history.value.findIndex(game => game.id === gameId)
 
-        if (game.restNumbers.length === 0) {
-            console.log('All numbers are picked')
-            finishGame(gameId)
-        }
-    }
-
-    function rollNewNumber(gameId: string) {
-        const game = getGame(gameId)
-        if (!game) return null
-        if (game.status === 'finished') return null
-
-        const index = Math.floor(Math.random() * game.restNumbers.length)
-        const pickNumber = game.restNumbers[index] as number
-
-        game.pickNumbers.push(pickNumber)
-        game.restNumbers.splice(index, 1)
-
-        if (game.restNumbers.length === 0) {
-            console.log('All numbers are picked')
-            finishGame(gameId)
+        if (gameIndex === -1) {
+            console.error('cant find game from history for id:', gameId)
+            return
         }
 
-        return pickNumber
+        pushRoundHistory({
+            type: 'statusUpdated',
+            data: {
+                value: roundHistoryDataValue.DELETED,
+                message: `Partie #${gameId} supprimée`
+            }
+        })
+        history.value?.splice(gameIndex, 1)
     }
 
-    function finishGame(gameId: string) {
-        const game = getGame(gameId)
-        if(!game) return
+    function finishGame() {
 
-        game.endDate = (new Date()).toISOString(),
-        game.status = 'finished'
+        if (currentGame.value) {
+            currentGame.value.status = roundHistoryStatus.FINISHED
+        }
+        pushRoundHistory({
+            type: 'statusUpdated',
+            user: getHostUser(),
+            data: {
+                value: roundHistoryDataValue.FINISHED,
+                message: `Partie #${gameId} finie`
+            }
+        })
     }
 
-    return { createNewGame, getGame, finishGame, rollNewNumber, deleteGame, pickNumber }
+    // GAME ACTIONS
+    function rollNewNumber(manualNumber?: number) {
+        const pickNumber = typeof manualNumber === 'number'
+            ? manualNumber
+            : restNumbers.value[Math.floor(Math.random() * restNumbers.value.length)] as number
+
+
+        if (!restNumbers.value.includes(pickNumber)) {
+            return { error: `Le nombre ${pickNumber} n\'est pas disponnible` }
+        }
+
+        pushRoundHistory({
+            type: 'rollNumber',
+            user: getHostUser(),
+            data: {
+                value: pickNumber,
+                message: typeof manualNumber === 'number' ? 'Numéro manuel' : 'Numéro aléatoire',
+            }
+        })
+
+        if(!restNumbers.value.length ) {
+            finishGame()
+        }
+
+        return { value: pickNumber }
+    }
+
+    function pushRoundHistory(value: Omit<RoundHistory, 'timestamp'>) {
+        const game = currentGame.value
+        if (!game) {
+            console.error('can\'t pushRoundHistory because game can\'t be find')
+            return
+        }
+
+        const history = {
+            ...value,
+            timestamp: new Date().getTime()
+        }
+
+        game.roundHistory.push(history)
+        return history
+    }
+
+    return { currentGame, pickNumbers, restNumbers, gameHistory, isFinished, createNewGame, finishGame, rollNewNumber, deleteGame }
 }

@@ -8,54 +8,52 @@ definePageMeta({
     },
 })
 
-
-// TODO: store game history on each actions
-// on pickNumber, pickManualNumber, userWinRow, useWinCard, gameFinished
-
 // Bingo features
-const { currentGame, gameId, isFinished } = useCurrentBingoGame()
-const { rollNewNumber, pickNumber } = useBingoGame()
+const route = useRoute('game')
+const gameId = computed(() => {
+    const id = route.params.id
+    return (Array.isArray(id) ? id[0] : id) as string
+})
 
+const { currentGame, gameHistory, isFinished, rollNewNumber } = useBingoGame(gameId.value)
 
 // Game state
 const displayFinishedModal = ref(false)
-watch(isFinished, (value) => {
-    if (value) displayFinishedModal.value = true
+watch(isFinished, () => {
+    displayFinishedModal.value = true
 })
 
 // Game history
-const gameHistory = ref<TimelineItem[]>([])
-const currentRound = computed(() => gameHistory.value.length)
+const formatDate = (date: Date) => date.toLocaleString('fr-FR', { hour: '2-digit', minute: '2-digit', second: '2-digit',hour12: false})
+const timelineItemList = computed(() => {
+    const items = gameHistory.value.map((roundHistory, i) => {
 
-const formatTlDate = (date: Date) => {
-    return date.toLocaleString('fr-FR', { hour: '2-digit', minute: '2-digit', second: '2-digit',hour12: false})
-}
+    const title = roundHistory.type === 'statusUpdated'
+        ? 'Informatiom de partie'
+        : roundHistory.type === 'rollNumber'
+            ? `Nouveau numéro: ${roundHistory.data?.value}`
+            : roundHistory.type === 'userAction'
+                ? 'Action d\'un joueur'
+                : ''
 
-function createTimelineItem(number: number, item?: Omit<TimelineItem, 'date'> & { date?: Date }) {
+
     return {
-        title: `Nombre: ${number}`,
-        icon: 'i-lucide-rocket',
-        value: number,
-        ...(item || {}),
-        date: item?.date ? formatTlDate(item.date) : 'unknown date',
-    }
-}
+            title,
+            icon: 'i-lucide-rocket',
+            value: i,
+            description: roundHistory.data?.message,
+            date: formatDate(new Date(roundHistory.timestamp)),
+        } as TimelineItem
+    })
 
-watch(currentGame, (game) => {
-    console.log('watch currentGame', game)
-    const list = game?.pickNumbers.map((n) => createTimelineItem(n, { description: 'Entrée pré-enregistrée' }))
-    if(!list) return
-    list.reverse()
+    return items.reverse()
+})
+const currentRound = computed(() => timelineItemList.value.length)
 
-    gameHistory.value.push(...list)
-},{ immediate: true })
 
-function rollNumber() {
-    const number = rollNewNumber(gameId.value)
-    if (!number) return
-
-    const item = createTimelineItem(number, { date: new Date()})
-    gameHistory.value.unshift(item)
+// Next number
+function onNextNumberClicked(_event: Event) {
+    rollNewNumber()
 }
 
 const manuelInputError = ref('')
@@ -66,13 +64,12 @@ function onManuelInput(event: Event) {
     const value = parseInt(target?.value)
     if (typeof value !== 'number') return
 
-    const response = pickNumber(gameId.value, value)
-    if (response) {
+    const response = rollNewNumber(value)
+
+    if (response?.error) {
         manuelInputError.value = response.error
-    } else {
-        const item = createTimelineItem(value, { date: new Date(), description: 'Entrée manuelle' })
-        gameHistory.value.unshift(item)
     }
+
     target.value = ''
 }
 
@@ -106,13 +103,17 @@ usePage({
             <div :class="$style.body">
                 <div :class="$style.main">
                     <VBingoGrid
+                        v-if="currentGame"
                         :game="currentGame"
                     />
                 </div>
                 <aside :class="$style.aside">
                     <div :class="$style.aside__title" class="text-lg">Historique de la partie: <strong>{{ currentRound }}</strong></div>
                     <div :class="$style['history-aside']">
-                        <UTimeline v-model="currentRound" :items="gameHistory" />
+                        <UTimeline
+                            :default-value="0"
+                            :items="timelineItemList"
+                        />
                     </div>
                 </aside>
                 <div :class="$style.controls">
@@ -121,7 +122,7 @@ usePage({
                         :disabled="isFinished"
                         label="Tirer un numéro"
                         :color="isFinished ? 'neutral' : undefined"
-                        @click="rollNumber"
+                        @click="onNextNumberClicked"
                     />
                     <UFormField v-show="currentGame?.options.manuelMode" label="Choisir le prochain numéro" :error="manuelInputError">
                         <UInput @change="onManuelInput" @blur="manuelInputError = ''" type="number" />
@@ -177,6 +178,7 @@ usePage({
 
     &::before {
         position: absolute;
+        pointer-events: none;
         content: '';
         inset: 0;
         border-radius: 4px;

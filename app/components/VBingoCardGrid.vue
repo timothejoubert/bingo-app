@@ -19,7 +19,8 @@ defineProps<{
                 :key="'row' + rowIndex + 'column' + columnIndex + (column || 'empty')"
                 :class="[$style.column]"
             >
-                {{ column }}
+                <template v-if="column">{{ column }}</template>
+                <VPlaceholder v-else :class="$style.placholder"/>
             </div>
         </div>
     </div>
@@ -45,5 +46,10 @@ defineProps<{
     justify-content: center;
     border: 1px solid var(--ui-border);
     aspect-ratio: 1;
+}
+
+.placholder {
+    width: 100%;
+    height: 100%;
 }
 </style>
