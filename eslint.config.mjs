@@ -29,12 +29,6 @@ export default withNuxt(
             ignoreHTMLAttributeValues: true,
         }],
     },
-}).override('nuxt/typescript/rules', {
-    rules: {
-        '@typescript-eslint/no-empty-object-type': ['error', {
-            allowInterfaces: 'with-single-extends',
-        }],
-    },
 }).append({
     files: ['**/*.ts', '**/*.js', '**/*.mjs', '**/*.jsx', '**/*.tsx'],
     rules: {
@@ -47,3 +41,10 @@ export default withNuxt(
         }],
     },
 })
+// .override('nuxt/typescript/rules', {
+//     rules: {
+//         '@typescript-eslint/no-empty-object-type': ['error', {
+//             allowInterfaces: 'with-single-extends',
+//         }],
+//     },
+// })
