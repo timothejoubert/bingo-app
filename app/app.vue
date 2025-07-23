@@ -2,7 +2,7 @@
 import type { BingoGame } from '~/types/bingo'
 import { useStorage, StorageSerializers } from '@vueuse/core'
 
-const history = useBingoGameHistory()
+const history = useBingoGameList()
 const localStorageHistory = useStorage<BingoGame[] | null>('bingo-app-history', null, undefined, {
   serializer: StorageSerializers.object,
 })

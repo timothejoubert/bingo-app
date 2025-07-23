@@ -3,10 +3,11 @@
 ## TO_DO
 - Type safety routes (https://www.youtube.com/watch?v=SXk-L19gTZk)
 - Faire une page de statistique pour montre le pourcentage de chaque numéro tombé (webWorkers, éviter de poluer le mainThread)
-- Add BDD (+ auth)
+- Add BDD + auth (supabase, firebase...)
+- Page FAQ (fonctionnement des parties, explications technique de l'app)
 
 ## DONE
-- Resposive
+- Responsive
 - Garder en local_storage les info (+ historique) si jamais on refresh la page
 
 

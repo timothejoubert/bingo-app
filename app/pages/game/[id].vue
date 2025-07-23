@@ -15,7 +15,7 @@ const gameId = computed(() => {
     return (Array.isArray(id) ? id[0] : id) as string
 })
 
-const { currentGame, gameHistory, isFinished, rollNewNumber } = useBingoGame(gameId.value)
+const { currentGame, gameHistory, isFinished, rollRandomNumber, rollNumber } = useBingoGame(gameId.value)
 
 // Game state
 const displayFinishedModal = ref(false)
@@ -53,18 +53,18 @@ const currentRound = computed(() => timelineItemList.value.length)
 
 // Next number
 function onNextNumberClicked(_event: Event) {
-    rollNewNumber()
+    rollRandomNumber()
 }
 
 const manuelInputError = ref('')
-function onManuelInput(event: Event) {
+function onManualInput(event: Event) {
     manuelInputError.value = ''
 
     const target = event.target as HTMLInputElement
     const value = parseInt(target?.value)
     if (typeof value !== 'number') return
 
-    const response = rollNewNumber(value)
+    const response = rollNumber(value)
 
     if (response?.error) {
         manuelInputError.value = response.error
@@ -86,7 +86,8 @@ usePage({
     <div :class="$style.root">
         <UModal
             v-model:open="displayFinishedModal"
-            title="Bravo votre partie est terminée"
+            title="Votre partie est terminée"
+            description="Partie terminée, choisisez une action"
         >
             <template
                 #body
@@ -95,6 +96,7 @@ usePage({
                     label="Retour à l'acceuil"
                     color="neutral"
                     variant="subtle"
+                    @click="navigateTo({ name: 'home' })"
                 />
                 <VCreateGameButton button-label="Relancer une partie" />
             </template>
@@ -124,8 +126,8 @@ usePage({
                         :color="isFinished ? 'neutral' : undefined"
                         @click="onNextNumberClicked"
                     />
-                    <UFormField v-show="currentGame?.options.manuelMode" label="Choisir le prochain numéro" :error="manuelInputError">
-                        <UInput @change="onManuelInput" @blur="manuelInputError = ''" type="number" />
+                    <UFormField v-show="currentGame?.options.manualMode" label="Choisir le prochain numéro" :error="manuelInputError">
+                        <UInput @change="onManualInput" @blur="manuelInputError = ''" type="number" />
                     </UFormField>
                 </div>
             </div>
@@ -152,7 +154,7 @@ usePage({
     min-height: 60vh;
 
     @include media('>=md') {
-        grid-template-columns: 1fr 260px;
+        grid-template-columns: 1fr 300px;
         grid-template-rows: 1fr auto;
         grid-template-areas:
             "main aside"
@@ -169,7 +171,7 @@ usePage({
 .aside {
     grid-area: aside;
     position: relative;
-    overflow-y: scroll;
+    overflow: clip auto;
     height: 100%;
     width: 100%;
     min-height: 50vh;

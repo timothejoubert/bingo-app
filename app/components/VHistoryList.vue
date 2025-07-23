@@ -2,10 +2,9 @@
 import type { TableColumn } from '@nuxt/ui'
 import { h, resolveComponent } from 'vue'
 import type { Row } from '@tanstack/vue-table'
-import { useClipboard } from '@vueuse/core'
 
 // Declaration
-const history = useBingoGameHistory()
+const history = useBingoGameList()
 
 const uTableMounted = ref(false)
 

@@ -10,20 +10,13 @@ export default withNuxt(
         ],
     },
 ).append({
-    files: ['**/*.stories.vue'],
+    files: ['./app/**/*.stories.vue'],
     rules: {
         'vue/multi-word-component-names': 'off',
     },
 }).override('nuxt/stylistic', {
     rules: {
         '@stylistic/function-paren-newline': ['error', 'consistent'],
-        '@stylistic/indent': ['error', 4],
-        '@stylistic/quotes': ['error', 'single'],
-        '@stylistic/semi': ['error', 'never'],
-        '@stylistic/comma-dangle': ['error', 'always-multiline'],
-        '@stylistic/brace-style': ['error', '1tbs'],
-        '@stylistic/object-curly-spacing': ['error', 'always'],
-        '@stylistic/array-bracket-spacing': ['error', 'never'],
     },
 }).override('nuxt/vue/rules', {
     rules: {
@@ -34,6 +27,12 @@ export default withNuxt(
             ignoreTemplateLiterals: true,
             ignoreTrailingComments: true,
             ignoreHTMLAttributeValues: true,
+        }],
+    },
+}).override('nuxt/typescript/rules', {
+    rules: {
+        '@typescript-eslint/no-empty-object-type': ['error', {
+            allowInterfaces: 'with-single-extends',
         }],
     },
 }).append({

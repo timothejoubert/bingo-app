@@ -6,7 +6,7 @@ defineProps<{
 
 const modalOpened = ref(false)
 
-const history = useBingoGameHistory()
+const history = useBingoGameList()
 
 const newGameId = computed(() => {
     const length = (history.value?.length || 0)
@@ -25,7 +25,7 @@ function onSubmit() {
     createNewGame({
         gridStart: startValue.value,
         gridEnd: endValue.value,
-        manuelMode: manuelMode.value
+        manualMode: manuelMode.value
     })
 
     navigateTo({ name: 'game', params: { id } })

@@ -110,7 +110,7 @@ type BingoGame = {
 ### Composables clés
 
 - `useBingoGame()` : Création et gestion des parties
-- `useBingoGameHistory()` : Gestion de l'historique
+- `useBingoGameList()` : Gestion des parties enregistrées
 - `useBingoGameMutation()` : Mutations des parties en cours
 
 ## 📱 Pages et navigation

@@ -3,15 +3,27 @@
         <NuxtLink
             :to="{ name: 'home' }"
             :class="$style.link"
-        >Home</NuxtLink>
+        >
+            Home
+        </NuxtLink>
         <NuxtLink
             :to="{ name: 'game_list' }"
             :class="$style.link"
-        >Historique</NuxtLink>
+        >
+            Historique
+        </NuxtLink>
         <NuxtLink
-            :to="{ name: 'card' }"
+            :to="{ name: 'card-generator' }"
             :class="$style.link"
-        >Cartons</NuxtLink>
+        >
+            Cartons
+        </NuxtLink>
+        <NuxtLink
+            :to="{ name: 'statistic' }"
+            :class="$style.link"
+        >
+            Statistique
+        </NuxtLink>
     </nav>
 </template>
 

@@ -2,7 +2,7 @@
 import { generateBingoCardGrid, type BingoCardGrid } from '~/utils/generate-bingo-card'
 
 definePageMeta({
-    name: 'card',
+    name: 'card-generator',
 })
 
 

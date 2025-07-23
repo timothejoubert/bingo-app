@@ -5,10 +5,10 @@ const props = defineProps<{
     game: BingoGame
 }>()
 
-const { pickNumbers, } = useBingoGame(props.game.id)
+const { pickNumbers } = useBingoGame(props.game.id)
 
 const lastPicked = computed(() => {
-    return pickNumbers.value[pickNumbers.value.length - 1]
+    return pickNumbers.value[pickNumbers.value.length - 1] || null
 })
 
 const displayedNumbers = computed(() => {
@@ -18,69 +18,10 @@ const displayedNumbers = computed(() => {
 </script>
 
 <template>
-    <div :class="$style.root" v-if="game">
-        <div
-            v-for="item in displayedNumbers"
-            :key="'cell-' + item"
-            :class="[
-                $style.cell,
-                pickNumbers?.includes(item) && $style['cell--active'],
-                item === lastPicked && $style['cell--current']
-            ]"
-        >
-            {{ item }}
-        </div>
-    </div>
-    <div :class="$style.root" v-else>
-        <USkeleton
-            v-for="item in displayedNumbers"
-            :key="'skeleton-cell-' + item"
-            :class="$style.cell"
-        />
-    </div>
+    <VBingoGridUi
+        :grid="displayedNumbers"
+        :selected-indicator="lastPicked"
+        :active-indicators="pickNumbers"
+        :loading="!game"
+    />
 </template>
-
-<style lang="scss" module>
-.root {
-    display: grid;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-
-    @include media('>=sm') {
-        grid-template-columns: repeat(10, minmax(0, 1fr));
-    }
-}
-
-.cell {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid var(--ui-border);
-    aspect-ratio: 1;
-    color: var(--ui-text-muted);
-
-    &::before {
-        position: absolute;
-        content: '';
-        inset: 10px;
-        border-radius: 50vmax;
-        z-index: -1;
-    }
-
-    &--active {
-        color: var(--ui-text-highlighted);
-
-        &::before {
-            background-color: var(--ui-bg-accented);
-        }
-    }
-
-    &--current {
-        color: var(--ui-text-inverted);
-
-        &::before {
-            background-color: var(--ui-color-primary-400);
-        }
-    }
-}
-</style>

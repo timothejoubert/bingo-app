@@ -6,19 +6,19 @@ export type BingoOptions = {
     manualMode: boolean
 }
 
-type User = {
+export type User = {
     id: string
     type: 'host' | 'player'
     name?: string
 }
 
-type RoundHistoryData = {
+export type RoundHistoryData = {
     [key: string]: unknown
     value?: string | number
     message?: string
 }
 
-type RoundHistory = {
+export type RoundHistory = {
     type: 'statusUpdated' | 'rollNumber' | 'userAction'
     user?: User
     data?: RoundHistoryData
@@ -34,6 +34,3 @@ export type BingoGame = {
     grid: number[]
     status: BingoStatus
 }
-type KeyArr<T> = readonly (keyof T)[];
-
-export type BingoGameKeys = KeyArr<BingoGame>
