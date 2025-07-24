@@ -5,12 +5,17 @@ export function getRandomItemFromList<T>(list: T[]): T {
     return list[Math.floor(Math.random() * list.length)] as T
 }
 
-export function getBingoGame(id: string, options: BingoOptions) {
-    const grid = Array.from(
-        { length: options.gridEnd - options.gridStart + 1 },
-        (_, i) => options.gridStart + i
+export function getGridNumbers(start: number, end: number) {
+    return  Array.from(
+        { length: end - start + 1 },
+        (_, i) => start + i
     )
+}
+
+export function getBingoGame(id: string, options: BingoOptions) {
+
     const now = new Date()
+
     return {
         id,
         startDate: now.toISOString(),
@@ -25,7 +30,7 @@ export function getBingoGame(id: string, options: BingoOptions) {
                 message: 'Partie créée',
             }
         }],
-        grid,
+        grid: getGridNumbers(options.gridStart, options.gridEnd),
         status: 'started' as const
     } as BingoGame
 }
