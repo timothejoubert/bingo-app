@@ -24,6 +24,12 @@
         >
             Statistique
         </NuxtLink>
+        <NuxtLink
+            :to="{ name: 'room' }"
+            :class="$style.link"
+        >
+            Partie online
+        </NuxtLink>
     </nav>
 </template>
 

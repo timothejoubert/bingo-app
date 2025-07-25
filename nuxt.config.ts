@@ -31,6 +31,11 @@ export default defineNuxtConfig({
         typedPages: true,
     },
     compatibilityDate: '2025-05-15',
+    nitro: {
+        experimental: {
+            websocket: true,
+        },
+    },
     vite: {
         css: {
             preprocessorOptions: {

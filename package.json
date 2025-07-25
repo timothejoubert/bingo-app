@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "engines": {
-    "node": "22.17"
+    "node": "22.14"
   },
   "scripts": {
     "build": "nuxt build",
@@ -18,13 +18,13 @@
     "lint:css": "stylelint \"**/*.{vue,css,scss}\""
   },
   "dependencies": {
-    "@nuxt/eslint": "1.7.0",
+    "@nuxt/eslint": "1.7.1",
     "@nuxt/icon": "1.15.0",
     "@nuxt/image": "1.10.0",
-    "@nuxt/ui": "^3.2.0",
+    "@nuxt/ui": "^3.3.0",
     "@tailwindcss/vite": "^4.1.11",
     "@vueuse/core": "^13.5.0",
-    "eslint": "^9.31.0",
+    "eslint": "^9.32.0",
     "include-media": "^2.0.0",
     "nuxt": "^4.0.1",
     "postcss-pxtorem": "^6.1.0",

@@ -128,6 +128,7 @@ function getRowItems(row: Row<TableData>) {
       :columns="columns"
       @vue:mounted="uTableMounted = true"
       :loading="loading"
+      :sorting="[{id: 'id', desc: true}]"
       loading-color="primary"
       loading-animation="carousel"
     />

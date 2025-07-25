@@ -38,6 +38,6 @@ defineProps<{
 }
 
 .content {
-    padding: var(--v-section-content-padding-block, 20px) var(--v-section-content-padding-inline, 18px);
+    padding: var(--v-section-content-padding-block, 34px) var(--v-section-content-padding-inline, 18px);
 }
 </style>
